@@ -38,6 +38,13 @@ webrtc_logs_*
 .DS_Store
 *.swp
 
+.idea/
+.qtcreator/
+.workbuddy/
+*.txt.user
+build/
+thirdParty/
+
 __pycache__/
 .pytest_cache/
 /_build
