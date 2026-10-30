@@ -520,7 +520,10 @@ def replace_vcproj_static_runtime(project_file: str):
 def install_webrtc(version, source_dir, install_dir, platform: str):
     win = platform.startswith("windows_")
     filename = f"webrtc.{platform}.{'zip' if win else 'tar.gz'}"
-    rm_rf(os.path.join(source_dir, filename))
+    # ネットワーク事情によりダウンロードが何度も失敗するため、
+    # 既存のアーカイブを削除せずに再利用できるようにしている。
+    # 注意: webrtc パッケージにはハッシュ検証がないため、
+    # 不完全なファイルが疑われる場合は手動で削除して再ダウンロードすること。
     archive = download(
         f"https://github.com/shiguredo-webrtc-build/webrtc-build/releases/download/{version}/{filename}",
         output_dir=source_dir,
@@ -638,7 +641,7 @@ def install_boost(
     filename = (
         f"boost-{version}_sora-cpp-sdk-{sora_version}_{platform}.{'zip' if win else 'tar.gz'}"
     )
-    rm_rf(os.path.join(source_dir, filename))
+    # 既存アーカイブを削除せず再利用する（sha256 検証があるため不正ファイルは自動再取得される）
     archive = download(
         f"https://github.com/shiguredo/sora-cpp-sdk/releases/download/{sora_version}/{filename}",
         output_dir=source_dir,
